@@ -120,27 +120,45 @@ class Settings
      */
     public static function registerActions()
     {
-        $activeTab = isset($_GET['tab']) ? strtolower($_GET['tab']) : "";
-        if ($activeTab !== "embedpress") {
+        $activeTab = static::getActiveTab();
+        
+        if (!in_array($activeTab, array('general', 'info'))) {
+            // Try gettign the settings from plugins
             $action = "embedpress:{$activeTab}:settings:register";
+
+            if (has_action($action)) {
+                do_action($action, array(
+                    'id'   => self::$sectionAdminIdentifier,
+                    'slug' => self::$identifier
+                ));
+            }
         } else {
-            $activeTab = "";
-        }
+            if ($activeTab === 'general') {
+                // General tab
+                register_setting(self::$sectionGroupIdentifier, self::$sectionGroupIdentifier, array(self::$namespace, "validateForm"));
 
-        if (!empty($activeTab) && has_action($action)) {
-            do_action($action, array(
-                'id'   => self::$sectionAdminIdentifier,
-                'slug' => self::$identifier
-            ));
-        } else {
-            register_setting(self::$sectionGroupIdentifier, self::$sectionGroupIdentifier, array(self::$namespace, "validateForm"));
+                add_settings_section(self::$sectionAdminIdentifier, '', null, self::$identifier);
 
-            add_settings_section(self::$sectionAdminIdentifier, '', null, self::$identifier);
-
-            foreach (self::$fieldMap as $fieldName => $field) {
-                add_settings_field($fieldName, $field['label'], array(self::$namespace, "renderField_{$fieldName}"), self::$identifier, self::${"section". ucfirst($field['section']) ."Identifier"});
+                foreach (self::$fieldMap as $fieldName => $field) {
+                    add_settings_field($fieldName, $field['label'], array(self::$namespace, "renderField_{$fieldName}"), self::$identifier, self::${"section". ucfirst($field['section']) ."Identifier"});
+                }
             }
         }
+    }
+
+    /**
+     * Get the active tab in the settings page. The default is the "info" page.
+     *
+     * @since   1.7.2
+     * @static
+     * @return  array
+     */
+    private static function getActiveTab()
+    {
+        $activeTab = isset($_GET['tab']) ? strtolower($_GET['tab']) : "";
+        $activeTab = empty($activeTab) ? "info" : $activeTab;
+
+        return $activeTab;
     }
 
     /**
@@ -156,9 +174,7 @@ class Settings
         // Include our custom jQuery file with WordPress Color Picker dependency
         wp_enqueue_script('ep-settings', EMBEDPRESS_URL_ASSETS .'js/settings.js', array('wp-color-picker'), EMBEDPRESS_PLG_VERSION, true);
 
-        $activeTab = isset($_GET['tab']) ? strtolower($_GET['tab']) : "";
-        $settingsFieldsIdentifier = !empty($activeTab) ? "embedpress:{$activeTab}" : self::$sectionGroupIdentifier;
-        $settingsSectionsIdentifier = !empty($activeTab) ? "embedpress:{$activeTab}" : self::$identifier;
+        $activeTab = static::getActiveTab();
         ?>
         <div id="embedpress-settings-wrapper">
             <header>
@@ -173,17 +189,31 @@ class Settings
 
             <div>
                 <h2 class="nav-tab-wrapper">
-                    <a href="?page=embedpress" class="nav-tab<?php echo $activeTab === 'embedpress' || empty($activeTab) ? ' nav-tab-active' : ''; ?> ">General settings</a>
+                    <a href="?page=embedpress" class="nav-tab<?php echo $activeTab === 'info' ? ' nav-tab-active' : ''; ?> ">About</a>
+
+                    <a href="?page=embedpress&tab=general" class="nav-tab<?php echo $activeTab === 'general' ? ' nav-tab-active' : ''; ?> ">General settings</a>
 
                     <?php do_action('embedpress:settings:render:tab', $activeTab); ?>
                 </h2>
 
-                <form action="options.php" method="POST" style="padding-bottom: 20px;">
-                    <?php settings_fields($settingsFieldsIdentifier); ?>
-                    <?php do_settings_sections($settingsSectionsIdentifier); ?>
+                <?php if ($activeTab !== 'info') : ?>
+                    <form action="options.php" method="POST" style="padding-bottom: 20px;">
+                        <?php
+                            $settingsFieldsIdentifier = $activeTab !== 'general' ? "embedpress:{$activeTab}" : self::$sectionGroupIdentifier;
+                            $settingsSectionsIdentifier = $activeTab !== 'general' ? "embedpress:{$activeTab}" : self::$identifier;
+                        ?>
+                        <?php settings_fields($settingsFieldsIdentifier); ?>
+                        <?php do_settings_sections($settingsSectionsIdentifier); ?>
 
-                    <button type="submit" class="button button-primary">Save changes</button>
-                </form>
+                        <button type="submit" class="button button-primary">Save changes</button>
+                    </form>
+                <?php endif; ?>
+
+                <?php if ($activeTab === 'info') : ?>
+                    <div>
+                        INFO GOES HERE
+                    </div>
+                <?php endif; ?>
             </div>
 
             <footer>
