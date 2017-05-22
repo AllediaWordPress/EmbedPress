@@ -1,0 +1,165 @@
+/**
+*** Based on SIMPLE GRID
+*** (C) ZACH COLE 2016
+**/
+
+/* ==== GRID SYSTEM ==== */
+
+#embedpress-settings-wrapper .container {
+  max-width: 600px;
+}
+
+#embedpress-settings-wrapper .row {
+  position: relative;
+  width: 100%;
+}
+
+#embedpress-settings-wrapper .row [class^="col"] {
+  float: left;
+  margin: 0.5rem 2%;
+  min-height: 0.125rem;
+}
+
+#embedpress-settings-wrapper .col-1,
+#embedpress-settings-wrapper .col-2,
+#embedpress-settings-wrapper .col-3,
+#embedpress-settings-wrapper .col-4,
+#embedpress-settings-wrapper .col-5,
+#embedpress-settings-wrapper .col-6,
+#embedpress-settings-wrapper .col-7,
+#embedpress-settings-wrapper .col-8,
+#embedpress-settings-wrapper .col-9,
+#embedpress-settings-wrapper .col-10,
+#embedpress-settings-wrapper .col-11,
+#embedpress-settings-wrapper .col-12 {
+  width: 96%;
+}
+
+#embedpress-settings-wrapper .col-1-sm {
+  width: 4.33%;
+}
+
+#embedpress-settings-wrapper .col-2-sm {
+  width: 12.66%;
+}
+
+#embedpress-settings-wrapper .col-3-sm {
+  width: 21%;
+}
+
+#embedpress-settings-wrapper .col-4-sm {
+  width: 29.33%;
+}
+
+#embedpress-settings-wrapper .col-5-sm {
+  width: 37.66%;
+}
+
+#embedpress-settings-wrapper .col-6-sm {
+  width: 46%;
+}
+
+#embedpress-settings-wrapper .col-7-sm {
+  width: 54.33%;
+}
+
+#embedpress-settings-wrapper .col-8-sm {
+  width: 62.66%;
+}
+
+#embedpress-settings-wrapper .col-9-sm {
+  width: 71%;
+}
+
+#embedpress-settings-wrapper .col-10-sm {
+  width: 79.33%;
+}
+
+#embedpress-settings-wrapper .col-11-sm {
+  width: 87.66%;
+}
+
+#embedpress-settings-wrapper .col-12-sm {
+  width: 96%;
+}
+
+#embedpress-settings-wrapper .row::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+#embedpress-settings-wrapper .hidden-sm {
+  display: none;
+}
+
+@media only screen and (min-width: 33.75em) {  /* 540px */
+  #embedpress-settings-wrapper .container {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 45em) {  /* 720px */
+  #embedpress-settings-wrapper .col-1 {
+    width: 4.33%;
+  }
+
+  #embedpress-settings-wrapper .col-2 {
+    width: 12.66%;
+  }
+
+  #embedpress-settings-wrapper .col-3 {
+    width: 21%;
+  }
+
+  #embedpress-settings-wrapper .col-4 {
+    width: 29.33%;
+  }
+
+  #embedpress-settings-wrapper .col-5 {
+    width: 37.66%;
+  }
+
+  #embedpress-settings-wrapper .col-6 {
+    width: 46%;
+  }
+
+  #embedpress-settings-wrapper .col-7 {
+    width: 54.33%;
+  }
+
+  #embedpress-settings-wrapper .col-8 {
+    width: 62.66%;
+  }
+
+  #embedpress-settings-wrapper .col-9 {
+    width: 71%;
+  }
+
+  #embedpress-settings-wrapper .col-10 {
+    width: 79.33%;
+  }
+
+  #embedpress-settings-wrapper .col-11 {
+    width: 87.66%;
+  }
+
+  #embedpress-settings-wrapper .col-12 {
+    width: 96%;
+  }
+
+  #embedpress-settings-wrapper .hidden-sm {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 60em) { /* 960px */
+  #embedpress-settings-wrapper .container {
+    width: 75%;
+    max-width: 60rem;
+  }
+}
+
+#embedpress-settings-wrapper .container img {
+  width: 100%;
+}

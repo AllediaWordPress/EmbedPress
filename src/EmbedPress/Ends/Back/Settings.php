@@ -179,8 +179,9 @@ class Settings
         wp_enqueue_script('ep-settings', EMBEDPRESS_URL_ASSETS .'js/settings.js', array('wp-color-picker'), EMBEDPRESS_PLG_VERSION, true);
 
         $activeTab = isset($_GET['tab']) ? strtolower($_GET['tab']) : "";
-        $settingsFieldsIdentifier = !empty($activeTab) ? "embedpress:{$activeTab}" : self::$sectionGroupIdentifier;
-        $settingsSectionsIdentifier = !empty($activeTab) ? "embedpress:{$activeTab}" : self::$identifier;
+
+        $settingsFieldsIdentifier = $activeTab === 'general' ? self::$sectionGroupIdentifier : "embedpress:{$activeTab}";
+        $settingsSectionsIdentifier = $activeTab === 'general' ? self::$identifier : "embedpress:{$activeTab}";
         ?>
         <div id="embedpress-settings-wrapper">
             <header>
@@ -196,7 +197,11 @@ class Settings
             <div>
                 <h2 class="nav-tab-wrapper">
                     <a href="?page=embedpress" class="nav-tab<?php echo $activeTab === 'embedpress' || empty($activeTab) ? ' nav-tab-active' : ''; ?> ">
-                        General settings
+                        Getting started
+                    </a>
+
+                    <a href="?page=embedpress&tab=general" class="nav-tab<?php echo $activeTab === 'general' ? ' nav-tab-active' : ''; ?> ">
+                        General
                     </a>
 
                     <?php do_action('embedpress:settings:render:tab', $activeTab); ?>
@@ -205,8 +210,47 @@ class Settings
                         Add-ons
                     </a>
                 </h2>
+                <?php if ($activeTab === 'embedpress' || empty($activeTab)) : ?>
+                    <div>
+                        <h3>EmbedPress: embed ANYTHING in WordPress</h3>
+                        <p>
+                            WordPress supports around 40 media sources. The EmbedPress plugin adds support for over 40 more, including popular sources for social media, maps, video, audio, charts, and documents.
+                        </p>
+                        <p>
+                            All you need is the URL. Add the URL to a WordPress post, and you can embed media from over 75 providers into your site!
+                        </p>
+                        <p>
+                            EmbedPress supports these providers including Facebook, Giphy, Twitch, all Google media (Docs, Maps, Sheets, Drawings, Slides), Instagram, and many more.
+                        </p>
 
-                <?php if ($activeTab !== 'addons') : ?>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h2>Embed Facebook Posts and Videos</h2>
+                                    <p>EmbedPress allow you to embed Facebook posts and videos. This is a plugin that makes it easy to embed media content into your site. All you have to do is copy-and-paste the URL of a supported provider into your post and pages. The plugin takes care of the rest! What could be simpler?</p>
+                                </div>
+
+                                <div class="col-8">
+                                    <div class="image"><img src="<?php echo EMBEDPRESS_URL_ASSETS; ?>/images/facebook-embed.jpg" alt="WordPress EmbedPress Embed Facebook Posts" scale="0"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="image"><img src="<?php echo EMBEDPRESS_URL_ASSETS; ?>/images/wistia-embed.jpg" alt="WordPress EmbedPress Embed Wistia Videos" scale="0"></div>
+                                </div>
+
+                                <div class="col-4">
+                                    <h2>Embed Wistia Videos</h2>
+                                    <p>Embed Wistia videos by just pasting the URL into a WordPress post or page.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+
+                <?php if (!empty($activeTab) && !in_array($activeTab, array('addons', 'embedpress')) ) : ?>
                     <form action="options.php" method="POST" style="padding-bottom: 20px;">
                         <?php settings_fields($settingsFieldsIdentifier); ?>
                         <?php do_settings_sections($settingsSectionsIdentifier); ?>
